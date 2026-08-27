@@ -1,0 +1,56 @@
+wandb:
+  mode: offline  # offline logging to ./wandb/offline-run-*/
+
+project_name: sceneflow
+restore_ckpt: none
+resume: none
+
+# paths
+logdir: ./checkpoints/sceneflow/
+save_path: ./checkpoints/sceneflow/
+
+# hardware and precision
+num_gpu: 2
+precision_dtype: bfloat16  # options: float16 | bfloat16 | float32
+seed: 666
+
+# data and training
+train_datasets: 'sceneflow'
+# global batch size (split evenly across processes)
+batch_size: 12
+image_size: [320, 736]
+max_disp: 192
+
+# augmentation
+saturation_range: [0, 1.4]
+do_flip: False
+spatial_scale: [-0.4, 0.8]
+noyjitter: True
+
+# GIO-Stereo model hyperparameters
+corr_implementation: "reg"
+corr_levels: 2
+corr_radius: 4
+hidden_dim: 96
+
+# optimization and scheduling (steps count global optimizer updates)
+lr: 4e-4
+wdecay: 1e-5
+total_step: 200000
+save_frequency: 5000
+val_frequency: 5000
+
+# iterations
+train_iters: 11
+valid_iters: 8
+
+# validation dataset (inline SceneFlow test-split validation)
+val_dataset: 'sceneflow'
+
+# visualization: offline W&B only
+viz:
+  enabled: true
+  every: 1000
+  to: wandb          # write only to the offline W&B directory
+  items: [disp_pred, disp_gt]  # optionally add left and right
+  max_samples: 1

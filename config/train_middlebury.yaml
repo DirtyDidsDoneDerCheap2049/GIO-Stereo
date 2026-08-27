@@ -1,0 +1,55 @@
+wandb:
+  mode: offline  # offline logging to ./wandb/offline-run-*/
+
+project_name: middlebury
+restore_ckpt: null
+resume: none
+logdir: ./checkpoints/middlebury/
+save_path: ./checkpoints/middlebury/
+
+# hardware/precision
+num_gpu: 2
+precision_dtype: bfloat16  # bfloat16 (no overflow risk with large max_disp=768) | float32
+seed: 666
+
+# data/training
+train_datasets: 'middlebury_finetune'
+# global batch size (will be split across GPUs)
+batch_size: 8
+image_size: [352, 896]
+max_disp: 192
+
+# augmentation
+saturation_range: [0.0, 1.4]
+do_flip: False
+spatial_scale: [-0.2, 0.4]
+noyjitter: True
+
+# GIO-Stereo model hyperparameters
+corr_implementation: "reg"
+corr_levels: 2
+corr_radius: 4
+hidden_dim: 96
+
+# optimization
+lr: 1e-4
+wdecay: 1e-5
+total_step: 100000
+save_frequency: 2000
+val_frequency: 2000
+
+# iterations
+train_iters: 11
+valid_iters: 8
+
+# validation dataset (Middlebury)
+val_resolution: "F"
+val_outlier_threshold: 2.0
+
+# visualization (offline W&B)
+viz:
+  enabled: true
+  every: 1000
+  to: wandb
+  items: [disp_pred, disp_gt]
+  max_samples: 1

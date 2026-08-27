@@ -1,0 +1,70 @@
+wandb:
+  mode: offline  # offline logging
+
+project_name: zero_shot
+restore_ckpt: none
+resume: none
+
+# paths
+logdir: ./checkpoints/zero-shot/
+save_path: ./checkpoints/zero-shot/
+
+# hardware and precision
+num_gpu: 2
+precision_dtype: bfloat16
+seed: 666
+
+# data and training
+train_datasets:  'foundation_zero_shot'
+# global batch size (split evenly across processes)
+batch_size: 8
+image_size: [320, 736]
+max_disp: 416
+
+# augmentation
+saturation_range: [0.7, 1.3]
+do_flip: False
+spatial_scale: [-0.2, 0.5]
+noyjitter: True
+
+# GIO-Stereo model hyperparameters
+corr_implementation: "reg"
+corr_levels: 2
+corr_radius: 4
+hidden_dim: 96
+
+# optimization and scheduling
+lr: 4e-4
+wdecay: 1e-5
+total_step: 400000
+save_frequency: 5000
+val_frequency: 5000
+
+# iterations
+train_iters: 11
+valid_iters: 8
+
+# validation datasets
+val_dataset: ['KITTI_2012', 'KITTI_2015', 'Middlebury', 'ETH3D']
+resolution: "H"
+
+# visualization: offline W&B only
+viz:
+  enabled: true
+  every: 1000
+  to: wandb
+  items: [disp_pred, disp_gt]
+  max_samples: 1
+
+# dataset mixture
+mix:
+  seed: 666
+  tartanair_max_total: 35000
+  tartanair_max_per_group: 100
+
+  crestereo_max_total: 39000
+  crestereo_max_per_group: 1300
+  exclude_crestereo_tree: true
+
+  fallingthings_max_total: 9000
+  fallingthings_max_per_group: 600

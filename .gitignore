@@ -1,0 +1,13 @@
+checkpoints_final/
+checkpoints/
+*.pth
+*.pt
+*.ckpt
+__pycache__/
+*.py[cod]
+wandb/
+*.log
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
